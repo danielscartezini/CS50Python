@@ -1,32 +1,39 @@
+import random
+
 def main():
-    plate = input("Plate: ").lower().strip()
+    plate = input("Plate: ")
     if is_valid(plate):
         print("Valid")
     else:
         print("Invalid")
 
+    choices = [1,2,3]
+    print(random.choice(choices))
+
 
 def is_valid(s):
     #“All vanity plates must start with at least two letters.”
-    starts_with_two_letters = s[0:2].isalpha()
+    if not s[0:2].isalpha():
+        return False
 
     #“… vanity plates may contain a maximum of 6 characters (letters or numbers) and a minimum of 2 characters.”
-    between_two_and_six = len(s) >= 2 and len(s) <= 6
+    if not (2 <= len(s) <= 6):
+        return False
 
-    #“No periods, spaces, or punctuation marks are allowed.”
-    is_string_all_alnum = s.isalnum()
-
-    if starts_with_two_letters and between_two_and_six and is_string_all_alnum:
-
-    #Numbers cannot be used in the middle of a plate; they must come at the end. For example, AAA222 would be an acceptable … vanity plate; AAA22A would not be acceptable. The first number used cannot be a ‘0’.”
-        has_digit = False
-        for char in s:
-            if char.isdigit():
-                if has_digit == False and char == "0":
-                    return False
-                has_digit = True
-            if has_digit and char.isalpha():
+    #“Numbers cannot be used in the middle of a plate; they must come at the end. For example, AAA222 would be an acceptable … vanity plate; AAA22A would not be acceptable. The first number used cannot be a ‘0’.”
+    have_num = False
+    for char in s:
+        if char.isdigit():
+            if char == '0':
+                return False
+            have_num = True
+            if char.isalpha() and have_num == True:
                 return False
 
-        return True
+    #“No periods, spaces, or punctuation marks are allowed.”
+    if not s.isalnum():
+        return False
+
+    return True
+
 main()
